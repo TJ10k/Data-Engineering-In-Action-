@@ -1,0 +1,11 @@
+# Ignore all .pyc files
+*.pyc
+
+# Ignore the file_structure.txt file
+file_structure.txt
+
+# Ignore the logs folder
+logs/
+
+# Ignore all .pptx files
+*.pptx
