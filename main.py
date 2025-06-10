@@ -3,6 +3,9 @@ import pandas as pd
 import re
 from tabulate import tabulate
 import os
+from visualizer import ask_for_visualization
+from db.utils import connect_to_db
+=======
 from cli_app.visualizer import ask_for_visualization
 
 # Determine base directory for logs and data
@@ -17,6 +20,7 @@ def clear_screen(): # defines a function to clear the terminal screen
 def pause(): # defines a function to pause the program and wait for user input
     input("\nPress Enter to return to the main menu...")
 
+=======
 def connect_to_db():  # defines a function to connect to the MySQL database
     host = os.getenv("DB_HOST", "localhost")
     port = int(os.getenv("DB_PORT", "3306"))

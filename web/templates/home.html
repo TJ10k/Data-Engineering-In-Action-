@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bank App</title>
+</head>
+<body>
+    <h1>Welcome to the Bank App</h1>
+    <h2>Customer Lookup</h2>
+    <form method="get" action="/customer">
+        <label for="ssn">Customer SSN:</label>
+        <input type="text" id="ssn" name="ssn" />
+        <button type="submit">Search</button>
+    </form>
+
+    <h2>Transaction Lookup</h2>
+    <form method="get" action="/transactions">
+        <label>ZIP:</label>
+        <input type="text" name="zip" />
+        <label>Month (MM):</label>
+        <input type="text" name="month" />
+        <label>Year (YYYY):</label>
+        <input type="text" name="year" />
+        <button type="submit">Search</button>
+    </form>
+</body>
+</html>

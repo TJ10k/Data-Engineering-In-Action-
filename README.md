@@ -9,6 +9,44 @@ This repository contains a command line interface for querying a MySQL database,
 #4 make a folder called logs and put that folder path in the visualizer function to log your visualization
 #5 Verify the data has been loaded and you can now run the cli and create visualizations and modify data in the database
 
+## Running the Flask Web App
+
+The `web/` directory contains a small Flask application that exposes the same
+operations as the CLI. Make sure Python and `pip` are installed and then
+install the required packages:
+
+```bash
+pip install flask mysql-connector-python pandas
+```
+
+### Local execution
+
+1. Export the database connection details if they differ from the defaults:
+
+```bash
+export DB_HOST=<your_host>
+export DB_PORT=<port>
+export DB_USER=<user>
+export DB_PASSWORD=<password>
+export DB_NAME=creditcard_capstone
+```
+
+2. Start the application:
+
+```bash
+python web/app.py
+```
+
+The app will be available at `http://localhost:5000`.
+
+### AWS deployment (EC2 example)
+
+1. Provision an EC2 instance with Python installed and clone this repository.
+2. Install the dependencies as shown above.
+3. Set the environment variables for your RDS or database instance.
+4. Run `python web/app.py` and configure security groups to allow inbound
+   traffic on port 5000 (or use a reverse proxy such as Nginx for production).
+=======
 ## Installing Dependencies
 
 1. Ensure Python 3 is available on your system.

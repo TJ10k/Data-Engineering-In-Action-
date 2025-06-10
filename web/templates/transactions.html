@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transactions</title>
+</head>
+<body>
+    <h1>Transactions</h1>
+    {% if transactions %}
+        <table border="1">
+            <tr>
+            {% for key in transactions[0].keys() %}
+                <th>{{ key }}</th>
+            {% endfor %}
+            </tr>
+            {% for row in transactions %}
+            <tr>
+                {% for value in row.values() %}
+                <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No transactions found.</p>
+    {% endif %}
+    <a href="/">Home</a>
+</body>
+</html>
