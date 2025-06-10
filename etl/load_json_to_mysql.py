@@ -2,6 +2,13 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, concat_ws, lpad, udf, initcap, lower
 from pyspark.sql.types import StringType
 import re
+import os
+
+DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_PORT = os.getenv("DB_PORT", "3306")
+DB_USER = os.getenv("DB_USER", "root")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "password")
+DB_NAME = os.getenv("DB_NAME", "creditcard_capstone")
 
 # Start Spark session
 spark = SparkSession.builder \
@@ -63,14 +70,15 @@ transformed_credit = credit_df \
     )
 
 # WRITE TO MYSQL
-def write_to_mysql(df, table_name): # Function to write DataFrame to MySQL
+def write_to_mysql(df, table_name):  # Function to write DataFrame to MySQL
+    jdbc_url = f"jdbc:mysql://{DB_HOST}:{DB_PORT}/{DB_NAME}"
     df.write \
         .format("jdbc") \
-        .option("url", "jdbc:mysql://localhost:3306/creditcard_capstone") \
+        .option("url", jdbc_url) \
         .option("driver", "com.mysql.cj.jdbc.Driver") \
         .option("dbtable", table_name) \
-        .option("user", "root") \
-        .option("password", "password") \
+        .option("user", DB_USER) \
+        .option("password", DB_PASSWORD) \
         .mode("append") \
         .save()
 
