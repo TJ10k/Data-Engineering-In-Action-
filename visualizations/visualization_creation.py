@@ -1,17 +1,31 @@
+import os
+import argparse
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import geopandas as gpd
 
 # Set Seaborn style
+
 sns.set(style="whitegrid")
+
+parser = argparse.ArgumentParser(
+    description="Create visualizations from the Capstone data files"
+)
+parser.add_argument(
+    "--data-dir",
+    help="Directory containing JSON data files",
+)
+args = parser.parse_args()
+
+DATA_DIR = args.data_dir or os.environ.get("CAPSTONE_DATA_DIR", "data")
 
 # === LOAD FILES ===
 try:
-    loan_df = pd.read_json(r"C:\Users\timothy.pluimer\Downloads\Capstone\data\cdw_sapp_loan_data.json")
-    credit_df = pd.read_json(r"C:\Users\timothy.pluimer\Downloads\Capstone\data\cdw_sapp_credit.json")
-    customer_df = pd.read_json(r"C:\Users\timothy.pluimer\Downloads\Capstone\data\cdw_sapp_customer.json")
-    branch_df = pd.read_json(r"C:\Users\timothy.pluimer\Downloads\Capstone\data\cdw_sapp_branch.json")
+    loan_df = pd.read_json(os.path.join(DATA_DIR, "cdw_sapp_loan_data.json"))
+    credit_df = pd.read_json(os.path.join(DATA_DIR, "cdw_sapp_credit.json"))
+    customer_df = pd.read_json(os.path.join(DATA_DIR, "cdw_sapp_customer.json"))
+    branch_df = pd.read_json(os.path.join(DATA_DIR, "cdw_sapp_branch.json"))
     print("All files loaded successfully.")
 except Exception as e:
     print(f"Error loading files: {e}")
@@ -39,7 +53,7 @@ except Exception as e:
 # === FIXED: TOP 10 STATES BY CUSTOMER COUNT ===
 
 # Load Customer Data
-customer_df = pd.read_json(r"C:\Users\timothy.pluimer\Downloads\Capstone\data\cdw_sapp_customer.json")
+customer_df = pd.read_json(os.path.join(DATA_DIR, "cdw_sapp_customer.json"))
 
 # Count Customers by State & Select Top 10
 state_counts = customer_df["CUST_STATE"].value_counts().reset_index()
@@ -69,7 +83,7 @@ plt.show()
 # === Highest Count Transaction Types ===
 
 # Load transaction data
-credit_df = pd.read_json(r"C:\Users\timothy.pluimer\Downloads\Capstone\data\cdw_sapp_credit.json")
+credit_df = pd.read_json(os.path.join(DATA_DIR, "cdw_sapp_credit.json"))
 
 # Group by Transaction Type & Count
 transaction_counts = credit_df["TRANSACTION_TYPE"].value_counts()
