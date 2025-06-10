@@ -31,10 +31,10 @@ export DB_PASSWORD=<password>
 export DB_NAME=creditcard_capstone
 ```
 
-2. Start the application:
+2. Start the application from the repository root:
 
 ```bash
-python web/app.py
+python -m web.app
 ```
 
 The app will be available at `http://localhost:5000`.
@@ -44,9 +44,8 @@ The app will be available at `http://localhost:5000`.
 1. Provision an EC2 instance with Python installed and clone this repository.
 2. Install the dependencies as shown above.
 3. Set the environment variables for your RDS or database instance.
-4. Run `python web/app.py` and configure security groups to allow inbound
+4. Run `python -m web.app` and configure security groups to allow inbound
    traffic on port 5000 (or use a reverse proxy such as Nginx for production).
-=======
 ## Installing Dependencies
 
 1. Ensure Python 3 is available on your system.
@@ -87,12 +86,10 @@ You can deploy the application on an Amazon EC2 instance or using Elastic Beanst
 3. In the Elastic Beanstalk console, configure environment variables (e.g., `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`).
 4. Deploy the bundle. Beanstalk will install the packages from `requirements.txt` and start the application.
 
-=======
 #4 Set the environment variable `CAPSTONE_DATA_DIR` to the location of the JSON data files
 #   (or pass `--data-dir` when running `visualization_creation.py`).
 #5 Set `VIS_LOG_FOLDER` to the folder where generated charts should be stored.
 #6 Verify the data has been loaded and you can now run the cli and create visualizations and modify data in the database
-=======
 ## Prerequisites
 
 Install the required Python packages:
@@ -152,7 +149,6 @@ python etl/load_json_to_mysql.py
 python etl/loan_api_to_mysql.py
 python main.py
 ```
-=======
 # Data Engineering In Action
 
 This project contains utilities for loading and analyzing credit card and loan data.
