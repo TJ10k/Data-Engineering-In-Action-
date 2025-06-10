@@ -4,6 +4,11 @@ import mysql.connector as dbconnect
 from mysql.connector import errorcode
 import os
 
+# Optional base directory for future data storage
+CAPSTONE_HOME = os.getenv(
+    "CAPSTONE_HOME", os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+)
+
 DB_HOST = os.getenv("DB_HOST", "localhost")
 DB_PORT = int(os.getenv("DB_PORT", "3306"))
 DB_USER = os.getenv("DB_USER", "root")

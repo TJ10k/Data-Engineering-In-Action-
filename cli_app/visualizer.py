@@ -4,6 +4,13 @@ import os
 import datetime
 import pandas as pd
 
+# Base directory for saving visualizations
+CAPSTONE_HOME = os.getenv(
+    "CAPSTONE_HOME",
+    os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+)
+DEFAULT_LOG_FOLDER = os.path.join(CAPSTONE_HOME, "logs", "visualizations")
+
 def ask_for_visualization(df, title, log_folder=None):
     """Visualize dataframe columns using various chart types.
 
@@ -20,7 +27,7 @@ def ask_for_visualization(df, title, log_folder=None):
         return
 
     if log_folder is None:
-        log_folder = r"C:\Users\timothy.pluimer\Downloads\Capstone\logs\visualizations"
+        log_folder = DEFAULT_LOG_FOLDER
     os.makedirs(log_folder, exist_ok=True)
 
     print("\nChoose a visualization type:")

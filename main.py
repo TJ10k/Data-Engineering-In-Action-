@@ -5,6 +5,12 @@ from tabulate import tabulate
 import os
 from cli_app.visualizer import ask_for_visualization
 
+# Determine base directory for logs and data
+CAPSTONE_HOME = os.getenv(
+    "CAPSTONE_HOME", os.path.dirname(os.path.abspath(__file__))
+)
+LOG_FOLDER = os.path.join(CAPSTONE_HOME, "logs", "visualizations")
+
 def clear_screen(): # defines a function to clear the terminal screen
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -64,7 +70,7 @@ def transaction_details(): # defines a function to retrieve and display transact
             print(f"\n--- Transactions in ZIP {zip_code} for {month}/{year} ---") # print header for the transaction details
             print(tabulate(df, headers='keys', tablefmt='psql', showindex=False)) # print the DataFrame in a pretty table format
 
-            ask_for_visualization(df, title="Transaction Details", log_folder=r"C:\Users\timothy.pluimer\Downloads\Capstone\logs\visualizations") # ask for visualization of the DataFrame
+            ask_for_visualization(df, title="Transaction Details", log_folder=LOG_FOLDER)  # ask for visualization of the DataFrame
 
         cursor.close() # close the cursor
         conn.close() # close the database connection
@@ -115,7 +121,7 @@ def view_customer_details(): # defines a function to view customer details based
             print("\n--- Customer Details ---") # print header for the customer details
             print(tabulate(df, headers="keys", tablefmt="psql", showindex=False)) # print the DataFrame in a pretty table format
 
-            ask_for_visualization(df, title="Customer Details", log_folder=r"C:\Users\timothy.pluimer\Downloads\Capstone\logs\visualizations") # ask for visualization of the DataFrame
+            ask_for_visualization(df, title="Customer Details", log_folder=LOG_FOLDER)  # ask for visualization of the DataFrame
         else: 
             print("Customer not found.")
             df = pd.DataFrame()
@@ -168,7 +174,7 @@ def modify_customer_details(): # defines a function to modify customer details b
             print("\n--- Updated Customer Details ---")
             print(tabulate(df, headers="keys", tablefmt="psql", showindex=False)) # print the DataFrame in a pretty table format
             # Ask for visualization of the updated customer details 
-            ask_for_visualization(df, title="Updated Customer Details", log_folder=r"C:\Users\timothy.pluimer\Downloads\Capstone\logs\visualizations")
+            ask_for_visualization(df, title="Updated Customer Details", log_folder=LOG_FOLDER)
         cursor.close()
         conn.close()
         pause()
@@ -198,7 +204,7 @@ def generate_monthly_bill(): # defines a function to generate the monthly bill f
             print(f"\nTotal bill for {month}/{year}:") # print header for the monthly bill
             print(tabulate(df, headers="keys", tablefmt="psql", showindex=False)) # print the DataFrame in a pretty table format
 
-            ask_for_visualization(df, title="Monthly Bill Summary", log_folder=r"C:\Users\timothy.pluimer\Downloads\Capstone\logs\visualizations")
+            ask_for_visualization(df, title="Monthly Bill Summary", log_folder=LOG_FOLDER)
         else:
             print("No transactions found.")
             df = pd.DataFrame()
@@ -259,7 +265,7 @@ def customer_transactions_date_range(): # defines a function to retrieve custome
             print(f"\n--- Transactions for Credit Card {cc_num} from {start_date} to {end_date} ---") # print header for the transaction details
             print(tabulate(df, headers="keys", tablefmt="psql", showindex=False)) # print the DataFrame in a pretty table format
 
-            ask_for_visualization(df, title="Customer Transactions by Date Range", log_folder=r"C:\Users\timothy.pluimer\Downloads\Capstone\logs\visualizations")
+            ask_for_visualization(df, title="Customer Transactions by Date Range", log_folder=LOG_FOLDER)
         else:
             print("No transactions found for that period.")
             df = pd.DataFrame()
