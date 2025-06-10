@@ -1,3 +1,5 @@
+import os
+import argparse
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -11,7 +13,19 @@ CAPSTONE_HOME = os.getenv(
 DATA_DIR = os.path.join(CAPSTONE_HOME, "data")
 
 # Set Seaborn style
+
 sns.set(style="whitegrid")
+
+parser = argparse.ArgumentParser(
+    description="Create visualizations from the Capstone data files"
+)
+parser.add_argument(
+    "--data-dir",
+    help="Directory containing JSON data files",
+)
+args = parser.parse_args()
+
+DATA_DIR = args.data_dir or os.environ.get("CAPSTONE_DATA_DIR", "data")
 
 # === LOAD FILES ===
 try:

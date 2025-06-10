@@ -27,6 +27,11 @@ def ask_for_visualization(df, title, log_folder=None):
         return
 
     if log_folder is None:
+        log_folder = os.environ.get(
+            "VIS_LOG_FOLDER",
+            os.path.join(os.getcwd(), "logs", "visualizations"),
+        )
+=======
         log_folder = DEFAULT_LOG_FOLDER
     os.makedirs(log_folder, exist_ok=True)
 
