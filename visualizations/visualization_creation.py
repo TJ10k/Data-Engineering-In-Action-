@@ -50,6 +50,8 @@ try:
 except Exception as e:
     print(f"Error creating self-employed loan pie chart: {e}")
 
+# Trend: Self-employed applicants have a lower approval rate compared to others ✔ Action: Financial institutions can tailor loan products or support services for self-employed individuals
+
 # === FIXED: TOP 10 STATES BY CUSTOMER COUNT ===
 
 # Load Customer Data
