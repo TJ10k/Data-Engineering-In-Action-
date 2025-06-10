@@ -3,6 +3,23 @@
 This repository contains a command line interface for querying a MySQL database, ETL scripts to load sample data, and utilities for creating visualizations.
 
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+## Base Directory
+
+Scripts look for data files and store generated visualizations relative to a base directory. By default this is the repository location, but it can be overridden with the `CAPSTONE_HOME` environment variable.
+
+Example:
+
+```bash
+export CAPSTONE_HOME=/opt/capstone
+python main.py
+```
+
+Data files should be stored in `$CAPSTONE_HOME/data` and visualizations will be written to `$CAPSTONE_HOME/logs/visualizations`.
+=======
+=======
+>>>>>>> c96475e720523d96376ffd7368abc623b1c20339
 #1 Download all files from the data folder if you would rather run the file to save the api its called api_save.py
 #2 Head to db folder and run the schema
 #3 Head to the etl folder and run both python scripts one at a time WARNING... change all file paths to your specific file paths
@@ -153,6 +170,9 @@ python main.py
 
 This project contains utilities for loading and analyzing credit card and loan data.
 
+<<<<<<< HEAD
+>>>>>>> origin/codex/build-flask-app-with-routes-and-templates
+=======
 ## Base Directory
 
 Scripts look for data files and store generated visualizations relative to a base directory. By default this is the repository location, but it can be overridden with the `CAPSTONE_HOME` environment variable.
@@ -165,3 +185,4 @@ python main.py
 ```
 
 Data files should be stored in `$CAPSTONE_HOME/data` and visualizations will be written to `$CAPSTONE_HOME/logs/visualizations`.
+>>>>>>> c96475e720523d96376ffd7368abc623b1c20339
