@@ -4,6 +4,7 @@ import re
 from tabulate import tabulate
 import os
 from visualizer import ask_for_visualization
+from db.utils import connect_to_db
 
 def clear_screen(): # defines a function to clear the terminal screen
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -11,14 +12,6 @@ def clear_screen(): # defines a function to clear the terminal screen
 def pause(): # defines a function to pause the program and wait for user input
     input("\nPress Enter to return to the main menu...")
 
-def connect_to_db(): # defines a function to connect to the MySQL database
-    return mysql.connector.connect(
-        host='localhost', 
-        port=3306, 
-        user='root',
-        password='password',
-        database='creditcard_capstone'
-    )
 
 def transaction_details(): # defines a function to retrieve and display transaction details based on ZIP code and date
     clear_screen() # clear the terminal screen
