@@ -3,7 +3,7 @@ import pandas as pd
 import re
 from tabulate import tabulate
 import os
-from visualizer import ask_for_visualization
+from cli_app.visualizer import ask_for_visualization
 
 def clear_screen(): # defines a function to clear the terminal screen
     os.system('cls' if os.name == 'nt' else 'clear')
