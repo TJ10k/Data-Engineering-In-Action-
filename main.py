@@ -3,7 +3,13 @@ import pandas as pd
 import re
 from tabulate import tabulate
 import os
-from visualizer import ask_for_visualization
+from cli_app.visualizer import ask_for_visualization
+
+# Determine base directory for logs and data
+CAPSTONE_HOME = os.getenv(
+    "CAPSTONE_HOME", os.path.dirname(os.path.abspath(__file__))
+)
+LOG_FOLDER = os.path.join(CAPSTONE_HOME, "logs", "visualizations")
 
 def clear_screen(): # defines a function to clear the terminal screen
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -11,13 +17,18 @@ def clear_screen(): # defines a function to clear the terminal screen
 def pause(): # defines a function to pause the program and wait for user input
     input("\nPress Enter to return to the main menu...")
 
-def connect_to_db(): # defines a function to connect to the MySQL database
+def connect_to_db():  # defines a function to connect to the MySQL database
+    host = os.getenv("DB_HOST", "localhost")
+    port = int(os.getenv("DB_PORT", "3306"))
+    user = os.getenv("DB_USER", "root")
+    password = os.getenv("DB_PASSWORD", "password")
+    database = os.getenv("DB_NAME", "creditcard_capstone")
     return mysql.connector.connect(
-        host='localhost', 
-        port=3306, 
-        user='root',
-        password='password',
-        database='creditcard_capstone'
+        host=host,
+        port=port,
+        user=user,
+        password=password,
+        database=database,
     )
 
 def transaction_details(): # defines a function to retrieve and display transaction details based on ZIP code and date
@@ -59,7 +70,7 @@ def transaction_details(): # defines a function to retrieve and display transact
             print(f"\n--- Transactions in ZIP {zip_code} for {month}/{year} ---") # print header for the transaction details
             print(tabulate(df, headers='keys', tablefmt='psql', showindex=False)) # print the DataFrame in a pretty table format
 
-            ask_for_visualization(df, title="Transaction Details", log_folder=r"C:\Users\timothy.pluimer\Downloads\Capstone\logs\visualizations") # ask for visualization of the DataFrame
+            ask_for_visualization(df, title="Transaction Details", log_folder=LOG_FOLDER)  # ask for visualization of the DataFrame
 
         cursor.close() # close the cursor
         conn.close() # close the database connection
@@ -110,7 +121,7 @@ def view_customer_details(): # defines a function to view customer details based
             print("\n--- Customer Details ---") # print header for the customer details
             print(tabulate(df, headers="keys", tablefmt="psql", showindex=False)) # print the DataFrame in a pretty table format
 
-            ask_for_visualization(df, title="Customer Details", log_folder=r"C:\Users\timothy.pluimer\Downloads\Capstone\logs\visualizations") # ask for visualization of the DataFrame
+            ask_for_visualization(df, title="Customer Details", log_folder=LOG_FOLDER)  # ask for visualization of the DataFrame
         else: 
             print("Customer not found.")
             df = pd.DataFrame()
@@ -126,13 +137,33 @@ def view_customer_details(): # defines a function to view customer details based
 def modify_customer_details(): # defines a function to modify customer details based on SSN
     clear_screen()
     ssn = input("Enter SSN of the customer to update: ") # prompt user for SSN
-    field = input("Enter the field to update (e.g., email, phone): ").strip() # prompt user for the field to update
+    field = input("Enter the field to update (e.g., email, phone): ").strip().lower() # prompt user for the field to update
+
+    allowed_fields = {
+        'first_name': 'FIRST_NAME',
+        'middle_name': 'MIDDLE_NAME',
+        'last_name': 'LAST_NAME',
+        'address': 'FULL_STREET_ADDRESS',
+        'city': 'CUST_CITY',
+        'state': 'CUST_STATE',
+        'country': 'CUST_COUNTRY',
+        'zip': 'CUST_ZIP',
+        'phone': 'CUST_PHONE',
+        'email': 'CUST_EMAIL'
+    }
+
+    if field not in allowed_fields:
+        print("Invalid field. Allowed fields are: " + ", ".join(allowed_fields.keys()))
+        pause()
+        return
+
     value = input(f"Enter new value for {field}: ").strip() # prompt user for the new value of the field
 
     try:
         conn = connect_to_db()
         cursor = conn.cursor()
-        query = f"UPDATE cdw_sapp_customer SET {field} = %s WHERE SSN = %s" # SQL query to update the specified field for the customer with the given SSN
+        column = allowed_fields[field]
+        query = f"UPDATE cdw_sapp_customer SET {column} = %s WHERE SSN = %s" # SQL query to update the specified field for the customer with the given SSN
         cursor.execute(query, (value, ssn)) # execute the SQL query with the provided value and SSN
         conn.commit()
         print("Customer details updated successfully.") # print success message
@@ -143,7 +174,7 @@ def modify_customer_details(): # defines a function to modify customer details b
             print("\n--- Updated Customer Details ---")
             print(tabulate(df, headers="keys", tablefmt="psql", showindex=False)) # print the DataFrame in a pretty table format
             # Ask for visualization of the updated customer details 
-            ask_for_visualization(df, title="Updated Customer Details", log_folder=r"C:\Users\timothy.pluimer\Downloads\Capstone\logs\visualizations")
+            ask_for_visualization(df, title="Updated Customer Details", log_folder=LOG_FOLDER)
         cursor.close()
         conn.close()
         pause()
@@ -173,7 +204,7 @@ def generate_monthly_bill(): # defines a function to generate the monthly bill f
             print(f"\nTotal bill for {month}/{year}:") # print header for the monthly bill
             print(tabulate(df, headers="keys", tablefmt="psql", showindex=False)) # print the DataFrame in a pretty table format
 
-            ask_for_visualization(df, title="Monthly Bill Summary", log_folder=r"C:\Users\timothy.pluimer\Downloads\Capstone\logs\visualizations")
+            ask_for_visualization(df, title="Monthly Bill Summary", log_folder=LOG_FOLDER)
         else:
             print("No transactions found.")
             df = pd.DataFrame()
@@ -234,7 +265,7 @@ def customer_transactions_date_range(): # defines a function to retrieve custome
             print(f"\n--- Transactions for Credit Card {cc_num} from {start_date} to {end_date} ---") # print header for the transaction details
             print(tabulate(df, headers="keys", tablefmt="psql", showindex=False)) # print the DataFrame in a pretty table format
 
-            ask_for_visualization(df, title="Customer Transactions by Date Range", log_folder=r"C:\Users\timothy.pluimer\Downloads\Capstone\logs\visualizations")
+            ask_for_visualization(df, title="Customer Transactions by Date Range", log_folder=LOG_FOLDER)
         else:
             print("No transactions found for that period.")
             df = pd.DataFrame()

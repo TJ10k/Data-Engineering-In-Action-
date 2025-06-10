@@ -1,17 +1,38 @@
+import os
+import argparse
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import geopandas as gpd
+import os
+
+# Determine base directory for data files
+CAPSTONE_HOME = os.getenv(
+    "CAPSTONE_HOME", os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+)
+DATA_DIR = os.path.join(CAPSTONE_HOME, "data")
 
 # Set Seaborn style
+
 sns.set(style="whitegrid")
+
+parser = argparse.ArgumentParser(
+    description="Create visualizations from the Capstone data files"
+)
+parser.add_argument(
+    "--data-dir",
+    help="Directory containing JSON data files",
+)
+args = parser.parse_args()
+
+DATA_DIR = args.data_dir or os.environ.get("CAPSTONE_DATA_DIR", "data")
 
 # === LOAD FILES ===
 try:
-    loan_df = pd.read_json(r"C:\Users\timothy.pluimer\Downloads\Capstone\data\cdw_sapp_loan_data.json")
-    credit_df = pd.read_json(r"C:\Users\timothy.pluimer\Downloads\Capstone\data\cdw_sapp_credit.json")
-    customer_df = pd.read_json(r"C:\Users\timothy.pluimer\Downloads\Capstone\data\cdw_sapp_customer.json")
-    branch_df = pd.read_json(r"C:\Users\timothy.pluimer\Downloads\Capstone\data\cdw_sapp_branch.json")
+    loan_df = pd.read_json(os.path.join(DATA_DIR, "cdw_sapp_loan_data.json"))
+    credit_df = pd.read_json(os.path.join(DATA_DIR, "cdw_sapp_credit.json"))
+    customer_df = pd.read_json(os.path.join(DATA_DIR, "cdw_sapp_customer.json"))
+    branch_df = pd.read_json(os.path.join(DATA_DIR, "cdw_sapp_branch.json"))
     print("All files loaded successfully.")
 except Exception as e:
     print(f"Error loading files: {e}")
@@ -36,10 +57,12 @@ try:
 except Exception as e:
     print(f"Error creating self-employed loan pie chart: {e}")
 
+# Trend: Self-employed applicants have a lower approval rate compared to others ✔ Action: Financial institutions can tailor loan products or support services for self-employed individuals
+
 # === FIXED: TOP 10 STATES BY CUSTOMER COUNT ===
 
 # Load Customer Data
-customer_df = pd.read_json(r"C:\Users\timothy.pluimer\Downloads\Capstone\data\cdw_sapp_customer.json")
+customer_df = pd.read_json(os.path.join(DATA_DIR, "cdw_sapp_customer.json"))
 
 # Count Customers by State & Select Top 10
 state_counts = customer_df["CUST_STATE"].value_counts().reset_index()
@@ -69,7 +92,7 @@ plt.show()
 # === Highest Count Transaction Types ===
 
 # Load transaction data
-credit_df = pd.read_json(r"C:\Users\timothy.pluimer\Downloads\Capstone\data\cdw_sapp_credit.json")
+credit_df = pd.read_json(os.path.join(DATA_DIR, "cdw_sapp_credit.json"))
 
 # Group by Transaction Type & Count
 transaction_counts = credit_df["TRANSACTION_TYPE"].value_counts()

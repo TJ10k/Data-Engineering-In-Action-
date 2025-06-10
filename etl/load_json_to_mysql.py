@@ -2,6 +2,19 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, concat_ws, lpad, udf, initcap, lower
 from pyspark.sql.types import StringType
 import re
+import os
+
+# Base directory for input data
+CAPSTONE_HOME = os.getenv(
+    "CAPSTONE_HOME", os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+)
+DATA_DIR = os.path.join(CAPSTONE_HOME, "data")
+
+DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_PORT = os.getenv("DB_PORT", "3306")
+DB_USER = os.getenv("DB_USER", "root")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "password")
+DB_NAME = os.getenv("DB_NAME", "creditcard_capstone")
 
 # Start Spark session
 spark = SparkSession.builder \
@@ -22,7 +35,9 @@ def format_phone(phone):
 format_phone_udf = udf(format_phone, StringType()) # Register the UDF
 
 # CUSTOMER ETL
-customer_df = spark.read.option("multiLine", True).json(r"C:\Users\timothy.pluimer\Downloads\Capstone\data\cdw_sapp_customer.json") # Load the JSON file
+customer_df = spark.read.option("multiLine", True).json(
+    os.path.join(DATA_DIR, "cdw_sapp_customer.json")
+)  # Load the JSON file
 # Transform the customer data
 transformed_customer = customer_df \
     .withColumn("FIRST_NAME", initcap(col("FIRST_NAME"))) \
@@ -37,7 +52,9 @@ transformed_customer = customer_df \
     )
 
 # BRANCH ETL
-branch_df = spark.read.option("multiLine", True).json(r"C:\Users\timothy.pluimer\Downloads\Capstone\data\cdw_sapp_branch.json")
+branch_df = spark.read.option("multiLine", True).json(
+    os.path.join(DATA_DIR, "cdw_sapp_branch.json")
+)
 # Transform the branch data
 transformed_branch = branch_df \
     .withColumn("BRANCH_PHONE", format_phone_udf(col("BRANCH_PHONE"))) \
@@ -48,7 +65,9 @@ transformed_branch = branch_df \
     )
 
 # CREDIT CARD ETL
-credit_df = spark.read.option("multiLine", True).json(r"C:\Users\timothy.pluimer\Downloads\Capstone\data\cdw_sapp_credit.json")
+credit_df = spark.read.option("multiLine", True).json(
+    os.path.join(DATA_DIR, "cdw_sapp_credit.json")
+)
 # Transform the credit card data
 transformed_credit = credit_df \
     .withColumn("TIMEID",
@@ -63,14 +82,15 @@ transformed_credit = credit_df \
     )
 
 # WRITE TO MYSQL
-def write_to_mysql(df, table_name): # Function to write DataFrame to MySQL
+def write_to_mysql(df, table_name):  # Function to write DataFrame to MySQL
+    jdbc_url = f"jdbc:mysql://{DB_HOST}:{DB_PORT}/{DB_NAME}"
     df.write \
         .format("jdbc") \
-        .option("url", "jdbc:mysql://localhost:3306/creditcard_capstone") \
+        .option("url", jdbc_url) \
         .option("driver", "com.mysql.cj.jdbc.Driver") \
         .option("dbtable", table_name) \
-        .option("user", "root") \
-        .option("password", "password") \
+        .option("user", DB_USER) \
+        .option("password", DB_PASSWORD) \
         .mode("append") \
         .save()
 

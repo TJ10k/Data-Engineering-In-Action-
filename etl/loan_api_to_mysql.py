@@ -1,7 +1,19 @@
-import pandas as pd 
+import pandas as pd
 import requests
 import mysql.connector as dbconnect
 from mysql.connector import errorcode
+import os
+
+# Optional base directory for future data storage
+CAPSTONE_HOME = os.getenv(
+    "CAPSTONE_HOME", os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+)
+
+DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_PORT = int(os.getenv("DB_PORT", "3306"))
+DB_USER = os.getenv("DB_USER", "root")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "password")
+DB_NAME = os.getenv("DB_NAME", "creditcard_capstone")
 
 def fetch_posts(): # Fetch loan application data
     url = "https://raw.githubusercontent.com/platformps/LoanDataset/main/loan_data.json" # URL to fetch data from
@@ -22,12 +34,12 @@ def load_to_mysql(data): # Load data into MySQL database
     print(f"DataFrame created with {len(df)} rows.") # Print number of rows in DataFrame
 
     try:
-        conn = dbconnect.connect( # Connect to MySQL database
-            host='localhost',
-            port=3306,
-            user='root',
-            password='password',
-            database='creditcard_capstone'
+        conn = dbconnect.connect(  # Connect to MySQL database
+            host=DB_HOST,
+            port=DB_PORT,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_NAME,
         )
         cursor = conn.cursor() # Create a cursor object to execute SQL queries
 
