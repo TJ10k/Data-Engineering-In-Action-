@@ -4,8 +4,19 @@ import os
 import datetime
 import pandas as pd
 
+# Base directory for saving visualizations
+CAPSTONE_HOME = os.getenv(
+    "CAPSTONE_HOME",
+    os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+)
+DEFAULT_LOG_FOLDER = os.path.join(CAPSTONE_HOME, "logs", "visualizations")
+
 def ask_for_visualization(df, title, log_folder=None):
-    """Function to visualize any column for various chart types."""
+    """Visualize dataframe columns using various chart types.
+
+    The ``title`` argument sets a default chart title.  Individual
+    visualizations may override this with a more specific title.
+    """
 
     if df.empty:
         print("\nNo data available to visualize.")
@@ -20,6 +31,8 @@ def ask_for_visualization(df, title, log_folder=None):
             "VIS_LOG_FOLDER",
             os.path.join(os.getcwd(), "logs", "visualizations"),
         )
+=======
+        log_folder = DEFAULT_LOG_FOLDER
     os.makedirs(log_folder, exist_ok=True)
 
     print("\nChoose a visualization type:")
@@ -39,6 +52,7 @@ def ask_for_visualization(df, title, log_folder=None):
 
     option = input("\nEnter option number: ").strip()
     plt.figure(figsize=(10, 6))
+    plt.title(title)
 
     all_columns = list(df.columns)
 

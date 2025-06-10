@@ -4,6 +4,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import geopandas as gpd
+import os
+
+# Determine base directory for data files
+CAPSTONE_HOME = os.getenv(
+    "CAPSTONE_HOME", os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+)
+DATA_DIR = os.path.join(CAPSTONE_HOME, "data")
 
 # Set Seaborn style
 
@@ -49,6 +56,8 @@ try:
     plt.show()
 except Exception as e:
     print(f"Error creating self-employed loan pie chart: {e}")
+
+# Trend: Self-employed applicants have a lower approval rate compared to others ✔ Action: Financial institutions can tailor loan products or support services for self-employed individuals
 
 # === FIXED: TOP 10 STATES BY CUSTOMER COUNT ===
 
