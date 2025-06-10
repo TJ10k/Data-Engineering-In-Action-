@@ -5,7 +5,11 @@ import datetime
 import pandas as pd
 
 def ask_for_visualization(df, title, log_folder=None):
-    """Function to visualize any column for various chart types."""
+    """Visualize dataframe columns using various chart types.
+
+    The ``title`` argument sets a default chart title.  Individual
+    visualizations may override this with a more specific title.
+    """
 
     if df.empty:
         print("\nNo data available to visualize.")
@@ -36,6 +40,7 @@ def ask_for_visualization(df, title, log_folder=None):
 
     option = input("\nEnter option number: ").strip()
     plt.figure(figsize=(10, 6))
+    plt.title(title)
 
     all_columns = list(df.columns)
 
