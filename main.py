@@ -126,13 +126,33 @@ def view_customer_details(): # defines a function to view customer details based
 def modify_customer_details(): # defines a function to modify customer details based on SSN
     clear_screen()
     ssn = input("Enter SSN of the customer to update: ") # prompt user for SSN
-    field = input("Enter the field to update (e.g., email, phone): ").strip() # prompt user for the field to update
+    field = input("Enter the field to update (e.g., email, phone): ").strip().lower() # prompt user for the field to update
+
+    allowed_fields = {
+        'first_name': 'FIRST_NAME',
+        'middle_name': 'MIDDLE_NAME',
+        'last_name': 'LAST_NAME',
+        'address': 'FULL_STREET_ADDRESS',
+        'city': 'CUST_CITY',
+        'state': 'CUST_STATE',
+        'country': 'CUST_COUNTRY',
+        'zip': 'CUST_ZIP',
+        'phone': 'CUST_PHONE',
+        'email': 'CUST_EMAIL'
+    }
+
+    if field not in allowed_fields:
+        print("Invalid field. Allowed fields are: " + ", ".join(allowed_fields.keys()))
+        pause()
+        return
+
     value = input(f"Enter new value for {field}: ").strip() # prompt user for the new value of the field
 
     try:
         conn = connect_to_db()
         cursor = conn.cursor()
-        query = f"UPDATE cdw_sapp_customer SET {field} = %s WHERE SSN = %s" # SQL query to update the specified field for the customer with the given SSN
+        column = allowed_fields[field]
+        query = f"UPDATE cdw_sapp_customer SET {column} = %s WHERE SSN = %s" # SQL query to update the specified field for the customer with the given SSN
         cursor.execute(query, (value, ssn)) # execute the SQL query with the provided value and SSN
         conn.commit()
         print("Customer details updated successfully.") # print success message
