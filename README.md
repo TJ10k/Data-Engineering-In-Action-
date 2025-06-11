@@ -1,144 +1,29 @@
 # Data Engineering in Action
 
-This repository contains a command line interface for querying a MySQL database, ETL scripts to load sample data, and utilities for creating visualizations.
+This project provides a command line interface, ETL scripts and a simple Flask application for working with a MySQL database that stores credit card and loan data.
 
+## Prerequisites
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-## Base Directory
+* Python 3
+* Install dependencies with:
+  ```bash
+  pip install -r requirements.txt
+  ```
 
-Scripts look for data files and store generated visualizations relative to a base directory. By default this is the repository location, but it can be overridden with the `CAPSTONE_HOME` environment variable.
+## Environment Variables
 
-Example:
+Set the following variables so the ETL scripts, CLI and web app can locate files and connect to the database:
 
+* `CAPSTONE_HOME` – optional base directory where data files and logs are stored. Defaults to the repository directory.
+* `DB_HOST` – database host (default `localhost`)
+* `DB_PORT` – database port (default `3306`)
+* `DB_USER` – MySQL user
+* `DB_PASSWORD` – MySQL password
+* `DB_NAME` – database name (default `creditcard_capstone`)
+
+Example setup:
 ```bash
 export CAPSTONE_HOME=/opt/capstone
-python main.py
-```
-
-Data files should be stored in `$CAPSTONE_HOME/data` and visualizations will be written to `$CAPSTONE_HOME/logs/visualizations`.
-=======
-=======
->>>>>>> c96475e720523d96376ffd7368abc623b1c20339
-#1 Download all files from the data folder if you would rather run the file to save the api its called api_save.py
-#2 Head to db folder and run the schema
-#3 Head to the etl folder and run both python scripts one at a time WARNING... change all file paths to your specific file paths
-<<<<<<< HEAD
-#4 make a folder called logs and put that folder path in the visualizer function to log your visualization
-#5 Verify the data has been loaded and you can now run the cli and create visualizations and modify data in the database
-
-## Running the Flask Web App
-
-The `web/` directory contains a small Flask application that exposes the same
-operations as the CLI. Make sure Python and `pip` are installed and then
-install the required packages:
-
-```bash
-pip install flask mysql-connector-python pandas
-```
-
-### Local execution
-
-1. Export the database connection details if they differ from the defaults:
-
-```bash
-export DB_HOST=<your_host>
-export DB_PORT=<port>
-export DB_USER=<user>
-export DB_PASSWORD=<password>
-export DB_NAME=creditcard_capstone
-```
-
-2. Start the application from the repository root:
-
-```bash
-python -m web.app
-```
-
-The app will be available at `http://localhost:5000`.
-
-### AWS deployment (EC2 example)
-
-1. Provision an EC2 instance with Python installed and clone this repository.
-2. Install the dependencies as shown above.
-3. Set the environment variables for your RDS or database instance.
-4. Run `python -m web.app` and configure security groups to allow inbound
-   traffic on port 5000 (or use a reverse proxy such as Nginx for production).
-## Installing Dependencies
-
-1. Ensure Python 3 is available on your system.
-2. Install the required packages using pip:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-## Running in AWS
-
-You can deploy the application on an Amazon EC2 instance or using Elastic Beanstalk.
-
-### EC2
-
-1. Launch an EC2 instance and connect to it via SSH.
-2. Clone this repository to the instance.
-3. Install the dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. Set up environment variables for database connectivity and any other secrets. For example:
-   ```bash
-   export DB_HOST=<your-database-host>
-   export DB_USER=<your-database-user>
-   export DB_PASSWORD=<your-database-password>
-   export DB_NAME=creditcard_capstone
-   ```
-   These variables keep credentials outside of the code base and comply with sandbox restrictions.
-5. Run the application:
-   ```bash
-   python main.py
-   ```
-
-### Elastic Beanstalk
-
-1. Create a new Elastic Beanstalk Python application.
-2. Include this repository's contents in a deployment bundle along with `requirements.txt`.
-3. In the Elastic Beanstalk console, configure environment variables (e.g., `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`).
-4. Deploy the bundle. Beanstalk will install the packages from `requirements.txt` and start the application.
-
-=======
-<<<<<<< HEAD
->>>>>>> codex/replace-absolute-windows-paths-with-configurable-ones
-#4 Set the environment variable `CAPSTONE_DATA_DIR` to the location of the JSON data files
-#   (or pass `--data-dir` when running `visualization_creation.py`).
-#5 Set `VIS_LOG_FOLDER` to the folder where generated charts should be stored.
-#6 Verify the data has been loaded and you can now run the cli and create visualizations and modify data in the database
-<<<<<<< HEAD
-## Prerequisites
-=======
-=======
-#4 make a folder called logs and put that folder path in the visualizer function to log your visualization
-#5 Verify the data has been loaded and you can now run the cli and create visualizations and modify data in the database
->>>>>>> codex/replace-absolute-windows-paths-with-configurable-ones
-
-Install the required Python packages:
-
-```bash
-pip install mysql-connector-python pandas matplotlib pyspark
-```
-
-## Configuration
-
-Before running the scripts, set the following environment variables so the tools can connect to MySQL:
-
-- `DB_HOST` – database host (e.g., `localhost`)
-- `DB_PORT` – database port (e.g., `3306`)
-- `DB_USER` – MySQL username
-- `DB_PASSWORD` – MySQL password
-- `DB_NAME` – target database name (default is `creditcard_capstone`)
-
-<<<<<<< HEAD
-Example configuration on Linux/macOS:
-
-```bash
 export DB_HOST=localhost
 export DB_PORT=3306
 export DB_USER=root
@@ -146,28 +31,36 @@ export DB_PASSWORD=secret
 export DB_NAME=creditcard_capstone
 ```
 
+Data files should be placed in `$CAPSTONE_HOME/data` and visualizations will be written to `$CAPSTONE_HOME/logs/visualizations`.
+
 ## Loading Data
 
-The `etl` directory contains scripts to populate the database:
-
+Run the ETL scripts from the repository root to populate the database:
 ```bash
-python etl/load_json_to_mysql.py   # load local JSON files
-python etl/loan_api_to_mysql.py    # load loan application data from API
+python etl/load_json_to_mysql.py   # loads customer and transaction JSON files
+python etl/loan_api_to_mysql.py    # loads loan application data from an API
 ```
 
 ## Running the CLI
 
-After the data is loaded, launch the console application with:
-
+After loading the data, start the interactive console application with:
 ```bash
 python main.py
 ```
 
+## Running the Web App
+
+The Flask app exposes similar functionality via a browser. Launch it with:
+```bash
+python -m web.app
+```
+The site will be available at `http://localhost:5000`.
+
 ## Example Workflow
 
-Below is a typical sequence to prepare the environment, load the data and start the CLI:
-
+Typical steps for a fresh environment:
 ```bash
+export CAPSTONE_HOME=/opt/capstone
 export DB_HOST=localhost
 export DB_PORT=3306
 export DB_USER=root
@@ -175,15 +68,14 @@ export DB_PASSWORD=secret
 export DB_NAME=creditcard_capstone
 python etl/load_json_to_mysql.py
 python etl/loan_api_to_mysql.py
-python main.py
+python main.py    # or `python -m web.app` to launch the web interface
 ```
+
 # Data Engineering In Action
 
 This project contains utilities for loading and analyzing credit card and loan data.
 
-<<<<<<< HEAD
->>>>>>> origin/codex/build-flask-app-with-routes-and-templates
-=======
+
 ## Base Directory
 
 Scripts look for data files and store generated visualizations relative to a base directory. By default this is the repository location, but it can be overridden with the `CAPSTONE_HOME` environment variable.
@@ -196,12 +88,8 @@ python main.py
 ```
 
 Data files should be stored in `$CAPSTONE_HOME/data` and visualizations will be written to `$CAPSTONE_HOME/logs/visualizations`.
->>>>>>> c96475e720523d96376ffd7368abc623b1c20339
-=======
 These values are used by `main.py` and the ETL scripts when establishing a
 database connection.
->>>>>>> master
->>>>>>> codex/replace-absolute-windows-paths-with-configurable-ones
 
 ## Downloading Sample Data and Visualizations
 To keep the repository small, the `data/` and `screenshots/` folders are not tracked in git. Use the helper script below to download and extract them:
