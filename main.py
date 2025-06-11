@@ -3,7 +3,7 @@ import re
 from tabulate import tabulate
 import os
 from cli_app.visualizer import ask_for_visualization
-from db.utils import connect_to_db
+from db.utils import connect_to_db, generate_monthly_bill as db_generate_monthly_bill, modify_customer
 
 # Determine base directory for logs and data
 CAPSTONE_HOME = os.getenv(
@@ -147,23 +147,14 @@ def modify_customer_details(): # defines a function to modify customer details b
     value = input(f"Enter new value for {field}: ").strip() # prompt user for the new value of the field
 
     try:
-        conn = connect_to_db()
-        cursor = conn.cursor()
         column = allowed_fields[field]
-        query = f"UPDATE cdw_sapp_customer SET {column} = %s WHERE SSN = %s" # SQL query to update the specified field for the customer with the given SSN
-        cursor.execute(query, (value, ssn)) # execute the SQL query with the provided value and SSN
-        conn.commit()
-        print("Customer details updated successfully.") # print success message
-        cursor.execute("SELECT * FROM cdw_sapp_customer WHERE SSN = %s", (ssn,)) # retrieve the updated customer details
-        updated_customer = cursor.fetchone() # fetch the first result from the executed query
-        if updated_customer: # check if the updated customer was found
-            df = pd.DataFrame([updated_customer])  # create a DataFrame from the fetched updated customer details
+        updated_customer = modify_customer(ssn, column, value)
+        print("Customer details updated successfully.")
+        if updated_customer:
+            df = pd.DataFrame([updated_customer])
             print("\n--- Updated Customer Details ---")
-            print(tabulate(df, headers="keys", tablefmt="psql", showindex=False)) # print the DataFrame in a pretty table format
-            # Ask for visualization of the updated customer details 
+            print(tabulate(df, headers="keys", tablefmt="psql", showindex=False))
             ask_for_visualization(df, title="Updated Customer Details", log_folder=LOG_FOLDER)
-        cursor.close()
-        conn.close()
         pause()
     except Exception as e:
         print("Error:", e)
@@ -176,27 +167,16 @@ def generate_monthly_bill(): # defines a function to generate the monthly bill f
     year = input("Enter Year (YYYY): ").strip()
 
     try:
-        conn = connect_to_db()
-        cursor = conn.cursor()
-        query = """
-            SELECT SUM(TRANSACTION_VALUE) AS bill_total
-            FROM cdw_sapp_credit_card
-            WHERE CREDIT_CARD_NO = %s AND MONTH(TIMEID) = %s AND YEAR(TIMEID) = %s;
-        """
-        cursor.execute(query, (cc_num, int(month), int(year))) # execute the SQL query with the provided credit card number, month, and year
-        result = cursor.fetchone()[0] # fetch the first result from the executed query
-
-        if result is not None: # check if a result was found
-            df = pd.DataFrame({'Total Bill': [f"${result:.2f}"]}) # create a DataFrame with the total bill amount
-            print(f"\nTotal bill for {month}/{year}:") # print header for the monthly bill
-            print(tabulate(df, headers="keys", tablefmt="psql", showindex=False)) # print the DataFrame in a pretty table format
+        result = db_generate_monthly_bill(cc_num, int(month), int(year))
+        if result is not None:
+            df = pd.DataFrame({'Total Bill': [f"${result:.2f}"]})
+            print(f"\nTotal bill for {month}/{year}:")
+            print(tabulate(df, headers="keys", tablefmt="psql", showindex=False))
 
             ask_for_visualization(df, title="Monthly Bill Summary", log_folder=LOG_FOLDER)
         else:
             print("No transactions found.")
             df = pd.DataFrame()
-        cursor.close()
-        conn.close()
         pause()
         return df
     except Exception as e:
