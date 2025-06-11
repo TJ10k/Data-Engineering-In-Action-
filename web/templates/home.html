@@ -11,6 +11,10 @@
     </header>
     <main>
     <h1>Welcome to CDW Sapp</h1>
+{% extends 'base.html' %}
+{% block title %}Bank App{% endblock %}
+{% block content %}
+    <h1>Welcome to the Bank App</h1>
     <h2>Customer Lookup</h2>
     <form method="get" action="/customer">
         <label for="ssn">Customer SSN:</label>
@@ -28,6 +32,4 @@
         <input type="text" name="year" />
         <button type="submit">Search</button>
     </form>
-</main>
-</body>
-</html>
+{% endblock %}
