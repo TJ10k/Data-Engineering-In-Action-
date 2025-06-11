@@ -202,3 +202,13 @@ These values are used by `main.py` and the ETL scripts when establishing a
 database connection.
 >>>>>>> master
 >>>>>>> codex/replace-absolute-windows-paths-with-configurable-ones
+
+## Downloading Sample Data and Visualizations
+To keep the repository small, the `data/` and `screenshots/` folders are not tracked in git. Use the helper script below to download and extract them:
+
+```bash
+bash scripts/download_assets.sh
+```
+
+Set the `ASSETS_URL` environment variable to point to an archive containing both directories if you host them elsewhere. Alternatively, run `python data/api_save.py` to fetch the loan dataset directly from its source.
+
