@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Modify Customer{% endblock %}
+{% block content %}
+<h1>Modify Customer</h1>
+<form method="post">
+    <label>SSN:</label>
+    <input type="text" name="ssn" required>
+    <label>Field:</label>
+    <select name="field">
+        <option value="first_name">First Name</option>
+        <option value="middle_name">Middle Name</option>
+        <option value="last_name">Last Name</option>
+        <option value="address">Address</option>
+        <option value="city">City</option>
+        <option value="state">State</option>
+        <option value="country">Country</option>
+        <option value="zip">Zip</option>
+        <option value="phone">Phone</option>
+        <option value="email">Email</option>
+    </select>
+    <label>Value:</label>
+    <input type="text" name="value" required>
+    <button type="submit">Update</button>
+</form>
+{% if customer %}
+<h2>Updated Customer</h2>
+<table>
+{% for key, value in customer.items() %}
+<tr><th>{{ key }}</th><td>{{ value }}</td></tr>
+{% endfor %}
+</table>
+{% endif %}
+<a href="/">Home</a>
+{% endblock %}

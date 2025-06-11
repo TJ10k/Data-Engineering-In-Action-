@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 
-from db.utils import connect_to_db
+from db.utils import connect_to_db, generate_monthly_bill, modify_customer
 import pandas as pd
 
 app = Flask(__name__)
@@ -48,6 +48,45 @@ def transactions():
         conn.close()
     df = pd.DataFrame(transactions)
     return render_template('transactions.html', transactions=df.to_dict(orient='records'))
+
+
+@app.route('/monthly_bill', methods=['GET', 'POST'])
+def monthly_bill():
+    total = None
+    if request.method == 'POST':
+        cc_num = request.form.get('cc_num')
+        month = request.form.get('month')
+        year = request.form.get('year')
+        if cc_num and month and year:
+            result = generate_monthly_bill(cc_num, int(month), int(year))
+            if result is not None:
+                total = f"${result:.2f}"
+    return render_template('monthly_bill.html', total=total)
+
+
+@app.route('/modify_customer', methods=['GET', 'POST'])
+def modify_customer_route():
+    customer = None
+    if request.method == 'POST':
+        ssn = request.form.get('ssn')
+        field = request.form.get('field', '').lower()
+        value = request.form.get('value')
+        fields = {
+            'first_name': 'FIRST_NAME',
+            'middle_name': 'MIDDLE_NAME',
+            'last_name': 'LAST_NAME',
+            'address': 'FULL_STREET_ADDRESS',
+            'city': 'CUST_CITY',
+            'state': 'CUST_STATE',
+            'country': 'CUST_COUNTRY',
+            'zip': 'CUST_ZIP',
+            'phone': 'CUST_PHONE',
+            'email': 'CUST_EMAIL',
+        }
+        column = fields.get(field)
+        if ssn and column and value:
+            customer = modify_customer(ssn, column, value)
+    return render_template('modify_customer.html', customer=customer)
 
 
 if __name__ == '__main__':
