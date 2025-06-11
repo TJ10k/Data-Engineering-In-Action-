@@ -49,10 +49,10 @@ export DB_PASSWORD=<password>
 export DB_NAME=creditcard_capstone
 ```
 
-2. Start the application:
+2. Start the application from the repository root:
 
 ```bash
-python web/app.py
+python -m web.app
 ```
 
 The app will be available at `http://localhost:5000`.
@@ -62,7 +62,7 @@ The app will be available at `http://localhost:5000`.
 1. Provision an EC2 instance with Python installed and clone this repository.
 2. Install the dependencies as shown above.
 3. Set the environment variables for your RDS or database instance.
-4. Run `python web/app.py` and configure security groups to allow inbound
+4. Run `python -m web.app` and configure security groups to allow inbound
    traffic on port 5000 (or use a reverse proxy such as Nginx for production).
 ## Installing Dependencies
 
