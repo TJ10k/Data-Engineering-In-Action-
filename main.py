@@ -18,7 +18,6 @@ def clear_screen(): # defines a function to clear the terminal screen
 def pause(): # defines a function to pause the program and wait for user input
     input("\nPress Enter to return to the main menu...")
 
-<<<<<<< HEAD
 def connect_to_db():  # defines a function to connect to the MySQL database
     host = os.getenv("DB_HOST", "localhost")
     port = int(os.getenv("DB_PORT", "3306"))
@@ -33,8 +32,6 @@ def connect_to_db():  # defines a function to connect to the MySQL database
         database=database,
     )
 
-=======
->>>>>>> c96475e720523d96376ffd7368abc623b1c20339
 def transaction_details(): # defines a function to retrieve and display transaction details based on ZIP code and date
     clear_screen() # clear the terminal screen
     zip_code = input("Enter 5-digit ZIP code (e.g., 12345): ") # prompt user for ZIP code
