@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Customer Details</title>
-</head>
-<body>
-    <img src="{{ url_for('static', filename='logo.png') }}" alt="Bank Logo" />
+{% extends 'base.html' %}
+{% block title %}Customer Details{% endblock %}
+{% block content %}
     <h1>Customer Details</h1>
     {% if customer %}
-        <table border="1">
+        <table>
         {% for key, value in customer.items() %}
             <tr><th>{{ key }}</th><td>{{ value }}</td></tr>
         {% endfor %}
@@ -16,5 +12,4 @@
         <p>No customer found.</p>
     {% endif %}
     <a href="/">Home</a>
-</body>
-</html>
+{% endblock %}
