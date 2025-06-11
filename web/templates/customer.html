@@ -1,13 +1,17 @@
-<!DOCTYPE html>
 <html>
 <head>
-    <title>Customer Details</title>
+    <title>Customer Details - CDW Sapp</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <img src="{{ url_for('static', filename='logo.png') }}" alt="Bank Logo" />
+    <header>
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="CDW Sapp Logo">
+        <span class="site-title">CDW Sapp</span>
+    </header>
+    <main>
     <h1>Customer Details</h1>
     {% if customer %}
-        <table border="1">
+        <table>
         {% for key, value in customer.items() %}
             <tr><th>{{ key }}</th><td>{{ value }}</td></tr>
         {% endfor %}
@@ -16,5 +20,6 @@
         <p>No customer found.</p>
     {% endif %}
     <a href="/">Home</a>
+</main>
 </body>
 </html>

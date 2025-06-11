@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Transactions</title>
+    <title>Transactions - CDW Sapp</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <img src="{{ url_for('static', filename='logo.png') }}" alt="Bank Logo" />
+    <header>
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="CDW Sapp Logo">
+        <span class="site-title">CDW Sapp</span>
+    </header>
+    <main>
     <h1>Transactions</h1>
     {% if transactions %}
-        <table border="1">
+        <table>
             <tr>
             {% for key in transactions[0].keys() %}
                 <th>{{ key }}</th>
@@ -25,5 +30,6 @@
         <p>No transactions found.</p>
     {% endif %}
     <a href="/">Home</a>
+</main>
 </body>
 </html>

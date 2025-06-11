@@ -57,7 +57,8 @@ python -m web.app
 The site will be available at `http://localhost:5000`.
 
 To display a custom logo, place an image named `logo.png` inside
-`web/static/`. It will appear at the top of each page.
+`web/static/`. It will appear in the site header on every page. You can modify
+`web/static/style.css` to adjust the layout and colors.
 
 ## Example Workflow
 
