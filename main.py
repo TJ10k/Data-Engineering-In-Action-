@@ -1,4 +1,3 @@
-import mysql.connector
 import pandas as pd
 import re
 from tabulate import tabulate
@@ -18,19 +17,6 @@ def clear_screen(): # defines a function to clear the terminal screen
 def pause(): # defines a function to pause the program and wait for user input
     input("\nPress Enter to return to the main menu...")
 
-def connect_to_db():  # defines a function to connect to the MySQL database
-    host = os.getenv("DB_HOST", "localhost")
-    port = int(os.getenv("DB_PORT", "3306"))
-    user = os.getenv("DB_USER", "root")
-    password = os.getenv("DB_PASSWORD", "password")
-    database = os.getenv("DB_NAME", "creditcard_capstone")
-    return mysql.connector.connect(
-        host=host,
-        port=port,
-        user=user,
-        password=password,
-        database=database,
-    )
 
 def transaction_details(): # defines a function to retrieve and display transaction details based on ZIP code and date
     clear_screen() # clear the terminal screen
