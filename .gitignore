@@ -9,3 +9,7 @@ logs/
 
 # Ignore all .pptx files
 *.pptx
+
+# Ignore data files and screenshots
+data/
+screenshots/
