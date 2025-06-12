@@ -54,9 +54,10 @@ th {
 }
 
 .header-logo {
-    height: 50px;
-    width: auto;
-    margin-right: 15px;
+    width: 100px;
+    height: auto;
+    margin-left: 20px;
+    margin-right: 20px;
     transition: transform 0.3s ease;
 }
 
