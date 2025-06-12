@@ -1,5 +1,6 @@
 import os
 import mysql.connector
+import pandas as pd
 
 
 def connect_to_db():
@@ -14,19 +15,28 @@ def connect_to_db():
 
 
 def generate_monthly_bill(cc_num: str, month: int, year: int):
-    """Return total transaction value for the specified credit card and month."""
+    """Return a dataframe of transactions and the monthly total."""
     conn = connect_to_db()
-    cursor = conn.cursor()
+    cursor = conn.cursor(dictionary=True)
     query = (
-        "SELECT SUM(TRANSACTION_VALUE) AS bill_total "
+        "SELECT TIMEID AS Date, TRANSACTION_TYPE AS Transaction, TRANSACTION_VALUE AS Amount "
         "FROM cdw_sapp_credit_card "
-        "WHERE CREDIT_CARD_NO = %s AND MONTH(TIMEID) = %s AND YEAR(TIMEID) = %s"
+        "WHERE CREDIT_CARD_NO = %s AND MONTH(TIMEID) = %s AND YEAR(TIMEID) = %s "
+        "ORDER BY TIMEID"
     )
     cursor.execute(query, (cc_num, month, year))
-    result = cursor.fetchone()
+    transactions = cursor.fetchall()
     cursor.close()
     conn.close()
-    return result[0] if result else None
+
+    if not transactions:
+        return pd.DataFrame(), 0.0
+
+    df = pd.DataFrame(transactions)
+    df['Date'] = pd.to_datetime(df['Date'].astype(str), format='%Y%m%d').dt.strftime('%m/%d/%Y')
+    total = df['Amount'].sum()
+    df['Amount'] = df['Amount'].apply(lambda x: f"${x:.2f}")
+    return df, total
 
 
 def modify_customer(ssn: str, field: str, value: str):

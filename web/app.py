@@ -52,16 +52,18 @@ def transactions():
 
 @app.route('/monthly_bill', methods=['GET', 'POST'])
 def monthly_bill():
+    transactions = None
     total = None
     if request.method == 'POST':
         cc_num = request.form.get('cc_num')
         month = request.form.get('month')
         year = request.form.get('year')
         if cc_num and month and year:
-            result = generate_monthly_bill(cc_num, int(month), int(year))
-            if result is not None:
-                total = f"${result:.2f}"
-    return render_template('monthly_bill.html', total=total)
+            df, total_val = generate_monthly_bill(cc_num, int(month), int(year))
+            if not df.empty:
+                transactions = df.to_dict(orient='records')
+                total = f"${total_val:.2f}"
+    return render_template('monthly_bill.html', transactions=transactions, total=total)
 
 
 @app.route('/modify_customer', methods=['GET', 'POST'])
