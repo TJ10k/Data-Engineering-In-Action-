@@ -8,10 +8,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <a href="{{ url_for('home') }}">
-            <img src="{{ url_for('static', filename='logo.png') }}" alt="Bank Logo" class="logo">
+    <header class="site-header">
+        <a href="{{ url_for('home') }}" class="home-link">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Bank Logo" class="header-logo">
+            <span class="site-title">CDW Sapp</span>
         </a>
+    </header>
+    <div class="container">
         {% block content %}{% endblock %}
     </div>
 </body>
