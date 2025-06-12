@@ -160,29 +160,65 @@ def modify_customer_details(): # defines a function to modify customer details b
         print("Error:", e)
         pause()
 
-def generate_monthly_bill(): # defines a function to generate the monthly bill for a customer based on credit card number and date
+def generate_monthly_bill():
     clear_screen()
     cc_num = input("Enter Credit Card Number: ").strip()
     month = input("Enter Month (MM): ").strip()
     year = input("Enter Year (YYYY): ").strip()
 
     try:
-        result = db_generate_monthly_bill(cc_num, int(month), int(year))
-        if result is not None:
-            df = pd.DataFrame({'Total Bill': [f"${result:.2f}"]})
-            print(f"\nTotal bill for {month}/{year}:")
-            print(tabulate(df, headers="keys", tablefmt="psql", showindex=False))
+        conn = connect_to_db()
+        cursor = conn.cursor(dictionary=True)
 
-            ask_for_visualization(df, title="Monthly Bill Summary", log_folder=LOG_FOLDER)
+        # Detailed transactions for the bill
+        query = """
+            SELECT TIMEID AS `Date`, TRANSACTION_TYPE AS `Transaction`, TRANSACTION_VALUE AS `Amount`
+            FROM cdw_sapp_credit_card
+            WHERE CREDIT_CARD_NO = %s AND MONTH(TIMEID) = %s AND YEAR(TIMEID) = %s
+            ORDER BY TIMEID;
+        """
+        cursor.execute(query, (cc_num, int(month), int(year)))
+        transactions = cursor.fetchall()
+
+        if transactions:
+            df = pd.DataFrame(transactions)
+
+            # Convert YYYYMMDD to MM/DD/YYYY
+            df['Date'] = pd.to_datetime(df['Date'].astype(str), format='%Y%m%d').dt.strftime('%m/%d/%Y')
+
+            # Format amount and calculate total
+            total = df['Amount'].sum()
+            df['Amount'] = df['Amount'].apply(lambda x: f"${x:.2f}")
+
+            # Display the bill layout
+            print("\n" + "=" * 60)
+            print(" " * 20 + "CDW SAPP CREDIT STATEMENT")
+            print(" " * 15 + f"Billing Period: {month}/{year}")
+            print("=" * 60)
+            print(f"Credit Card #: **** **** **** {cc_num[-4:]}")
+            print("-" * 60)
+
+            print(tabulate(df, headers="keys", tablefmt="psql", showindex=False))
+            print("-" * 60)
+            print(f"{'Total Charges':>50}: ${total:.2f}")
+            print("=" * 60)
+
+            ask_for_visualization(pd.DataFrame(transactions), title="Monthly Bill Breakdown", log_folder=LOG_FOLDER)
+
+            cursor.close()
+            conn.close()
+            pause()
+            return df
         else:
             print("No transactions found.")
-            df = pd.DataFrame()
-        pause()
-        return df
+            pause()
+            return pd.DataFrame()
+
     except Exception as e:
         print("Error:", e)
         pause()
         return pd.DataFrame()
+
 
 def customer_transactions_date_range(): # defines a function to retrieve customer transactions within a specified date range
     clear_screen() 
