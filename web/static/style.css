@@ -46,7 +46,8 @@ th {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 5px 0;
+    height: 60px;
+    padding: 0;
 }
 
 .home-link {
@@ -57,7 +58,7 @@ th {
 
 
 .center-logo {
-    width: 150px;
+    width: 120px;
     margin-bottom: 20px;
     transition: transform 0.3s ease;
 }
