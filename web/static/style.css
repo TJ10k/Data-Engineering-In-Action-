@@ -79,3 +79,21 @@ th {
 .center-logo:hover {
     transform: scale(1.15);
 }
+
+.bill-statement {
+    margin-top: 20px;
+}
+
+.bill-statement h2 {
+    margin-bottom: 5px;
+}
+
+.bill-statement p {
+    margin: 2px 0;
+    font-weight: 700;
+}
+
+.total {
+    font-weight: bold;
+    margin-top: 10px;
+}
