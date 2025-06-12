@@ -11,7 +11,27 @@
     <input type="text" name="year" required>
     <button type="submit">Generate</button>
 </form>
+
+{% if transactions %}
+<table>
+    <tr>
+        {% for key in transactions[0].keys() %}
+            <th>{{ key }}</th>
+        {% endfor %}
+    </tr>
+    {% for row in transactions %}
+    <tr>
+        {% for val in row.values() %}
+        <td>{{ val }}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+{% elif total is not none %}
+<p>No transactions found.</p>
+{% endif %}
+
 {% if total %}
-<p>Total Bill: {{ total }}</p>
+<p>Total Charges: {{ total }}</p>
 {% endif %}
 {% endblock %}
