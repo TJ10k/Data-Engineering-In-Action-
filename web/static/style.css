@@ -46,7 +46,8 @@ th {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 5px 0;
+    height: 60px;
+    padding: 0;
 }
 
 .home-link {
@@ -57,7 +58,7 @@ th {
 
 
 .center-logo {
-    width: 150px;
+    width: 120px;
     margin-bottom: 20px;
     transition: transform 0.3s ease;
 }
@@ -86,4 +87,16 @@ th {
 .total {
     font-weight: bold;
     margin-top: 10px;
+}
+
+/* Basic form control styles */
+input[type="text"], select {
+    padding: 2px 4px;
+    font-size: 0.9rem;
+    margin: 2px;
+}
+
+button {
+    padding: 4px 8px;
+    font-size: 0.9rem;
 }
