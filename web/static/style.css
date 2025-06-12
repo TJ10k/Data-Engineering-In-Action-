@@ -50,8 +50,9 @@ th {
 }
 
 .home-link {
-    display: flex;
-    align-items: center;
+    display: inline-block;
+    padding: 1px;
+    margin: 0 auto;
 }
 
 
