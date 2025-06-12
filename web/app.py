@@ -54,6 +54,9 @@ def transactions():
 def monthly_bill():
     transactions = None
     total = None
+    month = None
+    year = None
+    masked_cc = None
     if request.method == 'POST':
         cc_num = request.form.get('cc_num')
         month = request.form.get('month')
@@ -63,7 +66,15 @@ def monthly_bill():
             if not df.empty:
                 transactions = df.to_dict(orient='records')
                 total = f"${total_val:.2f}"
-    return render_template('monthly_bill.html', transactions=transactions, total=total)
+                masked_cc = f"**** **** **** {cc_num[-4:]}"
+    return render_template(
+        'monthly_bill.html',
+        transactions=transactions,
+        total=total,
+        month=month,
+        year=year,
+        masked_cc=masked_cc,
+    )
 
 
 @app.route('/modify_customer', methods=['GET', 'POST'])
