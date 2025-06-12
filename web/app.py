@@ -50,6 +50,31 @@ def transactions():
     return render_template('transactions.html', transactions=df.to_dict(orient='records'))
 
 
+@app.route('/transactions_range', methods=['GET'])
+def transactions_range():
+    cc_num = request.args.get('cc_num')
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
+    transactions = []
+    if cc_num and start_date and end_date:
+        conn = connect_to_db()
+        cursor = conn.cursor(dictionary=True)
+        query = (
+            "SELECT TRANSACTION_ID, CREDIT_CARD_NO, TIMEID,"
+            " TRANSACTION_TYPE, TRANSACTION_VALUE "
+            "FROM cdw_sapp_credit_card "
+            "WHERE CREDIT_CARD_NO = %s "
+            "AND DATE(TIMEID) BETWEEN %s AND %s "
+            "ORDER BY YEAR(TIMEID) DESC, MONTH(TIMEID) DESC, DAY(TIMEID) DESC"
+        )
+        cursor.execute(query, (cc_num, start_date, end_date))
+        transactions = cursor.fetchall()
+        cursor.close()
+        conn.close()
+    df = pd.DataFrame(transactions)
+    return render_template('transactions_range.html', transactions=df.to_dict(orient='records'))
+
+
 @app.route('/monthly_bill', methods=['GET', 'POST'])
 def monthly_bill():
     transactions = None
