@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}CDW Sapp{% endblock %}
 {% block content %}
-    <img src="{{ url_for('static', filename='logo.png') }}" alt="CDW Sapp Logo" class="center-logo">
-    <h1>Welcome to CDW Sapp</h1>
     <h2>Customer Lookup</h2>
     <form method="get" action="/customer">
         <label for="ssn">Customer SSN:</label>

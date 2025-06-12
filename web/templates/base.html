@@ -16,6 +16,7 @@
     </header>
     <div class="container">
         <img src="{{ url_for('static', filename='logo.png') }}" alt="CDW Sapp Logo" class="center-logo">
+        <h1 class="page-title">{% block title %}Welcome to CDW Sapp{% endblock %}</h1>
         {% block content %}{% endblock %}
     </div>
 </body>
