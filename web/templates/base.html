@@ -9,11 +9,9 @@
 </head>
 <body>
 <header class="site-header">
-    <header style="height: 100px; background-color: #003366;">
-        <a href="{{ url_for('home') }}" class="home-link">
-            <img src="{{ url_for('static', filename='logo.png') }}" alt="CDW Sapp Logo" class="center-logo">
-        </a>
-    </header>
+    <a href="{{ url_for('home') }}" class="home-link">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="CDW Sapp Logo" class="center-logo">
+    </a>
 </header>
     <div class="container">
         {% block content %}{% endblock %}
