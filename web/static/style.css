@@ -45,7 +45,8 @@ th {
     color: white;
     display: flex;
     align-items: center;
-    padding: 10px 20px;
+    justify-content: center;
+    padding: 5px 0;
 }
 
 .home-link {
@@ -53,28 +54,15 @@ th {
     align-items: center;
 }
 
-.header-logo {
-    width: 100px;
-    height: auto;
-    margin-left: 20px;
-    margin-right: 20px;
-    transition: transform 0.3s ease;
-}
-
-.header-logo:hover {
-    transform: scale(1.1);
-}
-
-.site-title {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #ff6600;
-}
 
 .center-logo {
     width: 150px;
     margin-bottom: 20px;
     transition: transform 0.3s ease;
+}
+
+.site-header .center-logo {
+    margin-bottom: 0;
 }
 
 .center-logo:hover {
