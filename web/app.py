@@ -104,3 +104,176 @@ def modify_customer_route():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
+
+@app.route('/privacy')
+def privacy():
+    return render_template('privacy.html')
+
+
+@app.route('/terms')
+def terms():
+    return render_template('terms.html')
+
+
+@app.route('/help')
+def help_page():
+    return render_template('help.html')
+
+
+@app.route('/faq')
+def faq():
+    return render_template('faq.html')
+
+
+@app.route('/sitemap')
+def sitemap():
+    return render_template('sitemap.html')
+
+
+@app.route('/search')
+def search():
+    query = request.args.get('query')
+    results = []
+    if query:
+        conn = connect_to_db()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            "SELECT * FROM cdw_sapp_customer WHERE FIRST_NAME LIKE %s OR LAST_NAME LIKE %s",
+            (f"%{query}%", f"%{query}%")
+        )
+        results = cursor.fetchall()
+        cursor.close()
+        conn.close()
+    return render_template('search.html', results=results, query=query) 
+
+
+@app.route('/feedback', methods=['GET', 'POST'])
+def feedback():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        message = request.form.get('message')
+        # Here you would typically save the feedback to a database or send an email
+        print(f"Feedback received from {name} ({email}): {message}")
+    return render_template('feedback.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        # Here you would typically check the credentials against a database
+        if username == 'admin' and password == 'password':
+            return render_template('dashboard.html', username=username)
+        else:
+            error = "Invalid credentials. Please try again."
+            return render_template('login.html', error=error)
+    return render_template('login.html')
+
+
+@app.route('/dashboard')
+def dashboard():
+    # This route would typically require authentication
+    return render_template('dashboard.html', username='Admin')
+
+
+@app.route('/logout')
+def logout():
+    return render_template('login.html')
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        email = request.form.get('email')
+        # Here you would typically save the new user to a database
+        print(f"New user registered: {username} ({email})")
+        return render_template('login.html', message="Registration successful! Please log in.")
+    return render_template('register.html')
+
+
+@app.route('/reset_password', methods=['GET', 'POST'])
+def reset_password():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        # Here you would typically send a password reset link to the user's email
+        print(f"Password reset requested for {email}")
+        return render_template('login.html', message="Password reset link sent to your email.")
+    return render_template('reset_password.html')
+
+
+@app.route('/profile')
+def profile():
+    # This route would typically require authentication
+    return render_template('profile.html', username='Admin',
+                           email='admin@example.com')
+
+
+@app.route('/settings')
+def settings():
+    # This route would typically require authentication
+    return render_template('settings.html', username='Admin',
+                           email='admin@example.com')
+
+
+@app.route('/notifications')
+def notifications():
+    # This route would typically require authentication
+    return render_template('notifications.html', username='Admin',
+                           email='admin@example.com')
+
+
+@app.route('/support')
+def support():
+    # This route would typically require authentication
+    return render_template('support.html', username='Admin',
+                           email='admin@example.com')
+
+
+@app.route('/terms_of_service')
+def terms_of_service():
+    return render_template('terms_of_service.html')
+
+
+@app.route('/privacy_policy')
+def privacy_policy():
+    return render_template('privacy_policy.html')
+
+
+@app.route('/cookie_policy')
+def cookie_policy():
+    return render_template('cookie_policy.html')
+
+
+@app.route('/accessibility')
+def accessibility():
+    return render_template('accessibility.html')
+
+
+@app.route('/legal')
+def legal():
+    return render_template('legal.html')
+
+
+@app.route('/careers')
+def careers():
+    return render_template('careers.html')
+
+
+@app.route('/press')
+def press():
+    return render_template('press.html')
