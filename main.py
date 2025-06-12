@@ -192,7 +192,7 @@ def generate_monthly_bill():
 
             # Display the bill layout
             print("\n" + "=" * 60)
-            print(" " * 20 + "CDW SAPP CREDIT STATEMENT")
+            print(" " * 20 + "CDW SAPP BANK STATEMENT")
             print(" " * 15 + f"Billing Period: {month}/{year}")
             print("=" * 60)
             print(f"Credit Card #: **** **** **** {cc_num[-4:]}")
