@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Visualization{% endblock %}
+{% block content %}
+<h1>Visualization</h1>
+{% if image %}
+    <img src="{{ url_for('visualization_file', filename=image) }}" alt="Visualization">
+{% else %}
+    <p>No visualization available.</p>
+{% endif %}
+{% endblock %}
