@@ -192,13 +192,15 @@ def generate_monthly_bill():
 
             # Display the bill layout
             print("\n" + "=" * 60)
-            print(" " * 20 + "CDW SAPP CREDIT STATEMENT")
+            print(" " * 20 + "CDW SAPP BANK STATEMENT")
             print(" " * 15 + f"Billing Period: {month}/{year}")
             print("=" * 60)
             print(f"Credit Card #: **** **** **** {cc_num[-4:]}")
             print("-" * 60)
 
-            print(tabulate(df, headers="keys", tablefmt="psql", showindex=False))
+            table = tabulate(df, headers="keys", tablefmt="psql", showindex=False)
+            for line in table.splitlines():
+                print(line.center(60))
             print("-" * 60)
             print(f"{'Total Charges':>50}: ${total:.2f}")
             print("=" * 60)
