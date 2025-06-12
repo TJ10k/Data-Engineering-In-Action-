@@ -17,6 +17,40 @@
             </tr>
             {% endfor %}
         </table>
+
+        <form action="{{ url_for('visualize_transactions') }}" method="post">
+            <input type="hidden" name="zip" value="{{ zip_code }}">
+            <input type="hidden" name="month" value="{{ month }}">
+            <input type="hidden" name="year" value="{{ year }}">
+
+            <label>Chart Type:</label>
+            <select name="chart_type">
+                <option value="bar">Bar Chart</option>
+                <option value="line">Line Chart</option>
+                <option value="scatter">Scatter Plot</option>
+                <option value="pie">Pie Chart</option>
+                <option value="hist">Histogram</option>
+                <option value="box">Box Plot</option>
+                <option value="heatmap">Heatmap</option>
+                <option value="grouped_bar">Grouped Bar Chart</option>
+            </select>
+
+            <label>X Column:</label>
+            <select name="x_col">
+                {% for col in columns %}
+                    <option value="{{ col }}">{{ col }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Y Column:</label>
+            <select name="y_col">
+                {% for col in columns %}
+                    <option value="{{ col }}">{{ col }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Visualize</button>
+        </form>
     {% else %}
         <p>No transactions found.</p>
     {% endif %}
