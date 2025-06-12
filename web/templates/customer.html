@@ -1,25 +1,14 @@
-<html>
-<head>
-    <title>Customer Details - CDW Sapp</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <header>
-        <img src="{{ url_for('static', filename='logo.png') }}" alt="CDW Sapp Logo">
-        <span class="site-title">CDW Sapp</span>
-    </header>
-    <main>
+{% extends 'base.html' %}
+{% block title %}Customer Details - CDW Sapp{% endblock %}
+{% block content %}
     <h1>Customer Details</h1>
     {% if customer %}
         <table>
-        {% for key, value in customer.items() %}
-            <tr><th>{{ key }}</th><td>{{ value }}</td></tr>
-        {% endfor %}
+            {% for key, value in customer.items() %}
+                <tr><th>{{ key }}</th><td>{{ value }}</td></tr>
+            {% endfor %}
         </table>
     {% else %}
         <p>No customer found.</p>
     {% endif %}
-    <a href="/">Home</a>
-</main>
-</body>
-</html>
+{% endblock %}

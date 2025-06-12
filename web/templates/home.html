@@ -1,20 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>CDW Sapp</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <header>
-        <img src="{{ url_for('static', filename='logo.png') }}" alt="CDW Sapp Logo">
-        <span class="site-title">CDW Sapp</span>
-    </header>
-    <main>
-    <h1>Welcome to CDW Sapp</h1>
 {% extends 'base.html' %}
-{% block title %}Bank App{% endblock %}
+{% block title %}CDW Sapp{% endblock %}
 {% block content %}
-    <h1>Welcome to the Bank App</h1>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="CDW Sapp Logo" class="center-logo">
+    <h1>Welcome to CDW Sapp</h1>
     <h2>Customer Lookup</h2>
     <form method="get" action="/customer">
         <label for="ssn">Customer SSN:</label>
