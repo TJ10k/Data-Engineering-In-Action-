@@ -53,6 +53,8 @@ def generate_visualization(df, chart_type, x_col=None, y_col=None):
             )
             plt.title(f"Pie Chart of {x_col}")
 
+        df[x_col].value_counts().plot(kind="pie", autopct="%1.1f%%", startangle=90)
+        plt.title(f"Pie Chart of {x_col}")
         plt.ylabel("")
 
     elif chart_type == "hist":
