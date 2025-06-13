@@ -1,32 +1,63 @@
+
 {% extends 'base.html' %}
-{% block title %}Transactions By Range{% endblock %}
+{% block title %}Transactions By Range - CDW Sapp{% endblock %}
 {% block content %}
-<h1>Transactions By Date Range</h1>
-<form method="get">
-    <label>Credit Card No:</label>
-    <input type="text" name="cc_num" required>
-    <label>Start Date:</label>
-    <input type="date" name="start_date" required>
-    <label>End Date:</label>
-    <input type="date" name="end_date" required>
-    <button type="submit">Search</button>
-</form>
-{% if transactions %}
-<table>
-    <tr>
-        {% for key in transactions[0].keys() %}
-            <th>{{ key }}</th>
-        {% endfor %}
-    </tr>
-    {% for row in transactions %}
-    <tr>
-        {% for value in row.values() %}
-        <td>{{ value }}</td>
-        {% endfor %}
-    </tr>
-    {% endfor %}
-</table>
-{% elif request.args %}
-<p>No transactions found.</p>
-{% endif %}
+    <h1>Transactions by Date Range</h1>
+    
+    <div class="card">
+        <h2>📅 Search by Date Range</h2>
+        <form method="get">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Credit Card Number:</label>
+                    <input type="text" name="cc_num" placeholder="Enter credit card number" required>
+                </div>
+                <div class="form-group">
+                    <label>Start Date:</label>
+                    <input type="date" name="start_date" required>
+                </div>
+                <div class="form-group">
+                    <label>End Date:</label>
+                    <input type="date" name="end_date" required>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit">Search Transactions</button>
+                <a href="/" class="btn" style="background: #6c757d;">← Back to Home</a>
+            </div>
+        </form>
+    </div>
+
+    {% if transactions %}
+        <div class="card">
+            <h2>📊 Transaction Results</h2>
+            <p><strong>{{ transactions|length }}</strong> transactions found</p>
+            
+            <div style="overflow-x: auto; margin-top: 1rem;">
+                <table>
+                    <thead>
+                        <tr>
+                            {% for key in transactions[0].keys() %}
+                                <th>{{ key.replace('_', ' ').title() }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in transactions %}
+                        <tr>
+                            {% for value in row.values() %}
+                            <td>{{ value }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% elif request.args %}
+        <div class="card">
+            <h2>❌ No Transactions Found</h2>
+            <p>No transactions were found for the specified date range.</p>
+        </div>
+    {% endif %}
 {% endblock %}

@@ -1,57 +1,90 @@
+
 {% extends 'base.html' %}
 {% block title %}Transactions - CDW Sapp{% endblock %}
 {% block content %}
-    <h1>Transactions</h1>
+    <h1>Transaction Results</h1>
+    
     {% if transactions %}
-        <table>
-            <tr>
-                {% for key in transactions[0].keys() %}
-                    <th>{{ key }}</th>
-                {% endfor %}
-            </tr>
-            {% for row in transactions %}
-            <tr>
-                {% for value in row.values() %}
-                <td>{{ value }}</td>
-                {% endfor %}
-            </tr>
-            {% endfor %}
-        </table>
+        <div class="card">
+            <h2>📊 Transaction Data</h2>
+            <p><strong>Search Criteria:</strong> ZIP: {{ zip_code }}, Date: {{ month }}/{{ year }}</p>
+            
+            <div style="overflow-x: auto; margin: 1rem 0;">
+                <table>
+                    <thead>
+                        <tr>
+                            {% for key in transactions[0].keys() %}
+                                <th>{{ key.replace('_', ' ').title() }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in transactions %}
+                        <tr>
+                            {% for value in row.values() %}
+                            <td>{{ value }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-        <form action="{{ url_for('visualize_transactions') }}" method="post">
-            <input type="hidden" name="zip" value="{{ zip_code }}">
-            <input type="hidden" name="month" value="{{ month }}">
-            <input type="hidden" name="year" value="{{ year }}">
+        <div class="card">
+            <h2>📈 Create Visualization</h2>
+            <form action="{{ url_for('visualize_transactions') }}" method="post">
+                <input type="hidden" name="zip" value="{{ zip_code }}">
+                <input type="hidden" name="month" value="{{ month }}">
+                <input type="hidden" name="year" value="{{ year }}">
 
-            <label>Chart Type:</label>
-            <select name="chart_type">
-                <option value="bar">Bar Chart</option>
-                <option value="line">Line Chart</option>
-                <option value="scatter">Scatter Plot</option>
-                <option value="pie">Pie Chart</option>
-                <option value="hist">Histogram</option>
-                <option value="box">Box Plot</option>
-                <option value="heatmap">Heatmap</option>
-                <option value="grouped_bar">Grouped Bar Chart</option>
-            </select>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Chart Type:</label>
+                        <select name="chart_type">
+                            <option value="bar">📊 Bar Chart</option>
+                            <option value="line">📈 Line Chart</option>
+                            <option value="scatter">🔵 Scatter Plot</option>
+                            <option value="pie">🥧 Pie Chart</option>
+                            <option value="hist">📋 Histogram</option>
+                            <option value="box">📦 Box Plot</option>
+                            <option value="heatmap">🔥 Heatmap</option>
+                            <option value="grouped_bar">📊 Grouped Bar Chart</option>
+                        </select>
+                    </div>
 
-            <label>X Column:</label>
-            <select name="x_col">
-                {% for col in columns %}
-                    <option value="{{ col }}">{{ col }}</option>
-                {% endfor %}
-            </select>
+                    <div class="form-group">
+                        <label>X-Axis Column:</label>
+                        <select name="x_col">
+                            {% for col in columns %}
+                                <option value="{{ col }}">{{ col.replace('_', ' ').title() }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-            <label>Y Column:</label>
-            <select name="y_col">
-                {% for col in columns %}
-                    <option value="{{ col }}">{{ col }}</option>
-                {% endfor %}
-            </select>
+                    <div class="form-group">
+                        <label>Y-Axis Column:</label>
+                        <select name="y_col">
+                            {% for col in columns %}
+                                <option value="{{ col }}">{{ col.replace('_', ' ').title() }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
 
-            <button type="submit">Visualize</button>
-        </form>
+                <div class="form-actions">
+                    <button type="submit">Generate Visualization</button>
+                    <a href="/" class="btn" style="background: #6c757d;">← Back to Home</a>
+                </div>
+            </form>
+        </div>
     {% else %}
-        <p>No transactions found.</p>
+        <div class="card">
+            <h2>❌ No Transactions Found</h2>
+            <p>No transactions were found for the specified criteria.</p>
+            <div class="form-actions">
+                <a href="/" class="btn">← Back to Home</a>
+            </div>
+        </div>
     {% endif %}
 {% endblock %}

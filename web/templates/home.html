@@ -1,30 +1,61 @@
+
 {% extends 'base.html' %}
-{% block title %}CDW Sapp{% endblock %}
+{% block title %}CDW Sapp - Banking Dashboard{% endblock %}
 {% block content %}
-    <h2>Customer Lookup</h2>
-    <form method="get" action="/customer">
-        <label for="ssn">Customer SSN:</label>
-        <input type="text" id="ssn" name="ssn" />
-        <button type="submit">Search</button>
-    </form>
+    <h1>CDW Sapp Banking System</h1>
+    
+    <div class="grid grid-2">
+        <div class="card">
+            <h2>🔍 Customer Lookup</h2>
+            <form method="get" action="/customer">
+                <div class="form-group">
+                    <label for="ssn">Customer SSN:</label>
+                    <input type="text" id="ssn" name="ssn" placeholder="Enter SSN (e.g., 123456789)" required />
+                </div>
+                <div class="form-actions">
+                    <button type="submit">Search Customer</button>
+                </div>
+            </form>
+        </div>
 
-    <h2>Transaction Lookup</h2>
-    <form method="get" action="/transactions">
-        <label>ZIP:</label>
-        <input type="text" name="zip" />
-        <label>Month (MM):</label>
-        <input type="text" name="month" />
-        <label>Year (YYYY):</label>
-        <input type="text" name="year" />
-        <button type="submit">Search</button>
-    </form>
+        <div class="card">
+            <h2>💳 Transaction Lookup</h2>
+            <form method="get" action="/transactions">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>ZIP Code:</label>
+                        <input type="text" name="zip" placeholder="e.g., 12345" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Month:</label>
+                        <input type="number" name="month" min="1" max="12" placeholder="MM" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Year:</label>
+                        <input type="number" name="year" min="2018" max="2030" placeholder="YYYY" required />
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit">Search Transactions</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    <h2>Monthly Bill</h2>
-    <a href="/monthly_bill">Generate Monthly Bill</a>
+    <div class="nav-links">
+        <a href="/monthly_bill" class="nav-link">
+            <h3>📄 Monthly Bill</h3>
+            <p>Generate detailed monthly billing statements</p>
+        </a>
 
-    <h2>Transactions by Date Range</h2>
-    <a href="/transactions_range">Search By Date Range</a>
+        <a href="/transactions_range" class="nav-link">
+            <h3>📅 Date Range Search</h3>
+            <p>Search transactions within specific date ranges</p>
+        </a>
 
-    <h2>Modify Customer</h2>
-    <a href="/modify_customer">Modify Customer Details</a>
+        <a href="/modify_customer" class="nav-link">
+            <h3>✏️ Modify Customer</h3>
+            <p>Update customer details and information</p>
+        </a>
+    </div>
 {% endblock %}

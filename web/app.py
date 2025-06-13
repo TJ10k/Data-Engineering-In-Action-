@@ -305,7 +305,7 @@ def reset_password():
 
 @app.route('/profile')
 def profile():
-    # This route would typically require authentication
+    # This route would typically requiere authentication
     return render_template('profile.html', username='Admin',
                            email='admin@example.com')
 

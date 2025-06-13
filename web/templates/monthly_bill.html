@@ -1,41 +1,71 @@
+
 {% extends 'base.html' %}
-{% block title %}Monthly Bill{% endblock %}
+{% block title %}Monthly Bill - CDW Sapp{% endblock %}
 {% block content %}
-<h1>Monthly Bill</h1>
-<form method="post">
-    <label>Credit Card No:</label>
-    <input type="text" name="cc_num" required>
-    <label>Month (MM):</label>
-    <input type="text" name="month" required>
-    <label>Year (YYYY):</label>
-    <input type="text" name="year" required>
-    <button type="submit">Generate</button>
-</form>
+    <h1>Monthly Bill Generator</h1>
+    
+    <div class="card">
+        <h2>📋 Generate Bill Statement</h2>
+        <form method="post">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Credit Card Number:</label>
+                    <input type="text" name="cc_num" placeholder="Enter credit card number" required>
+                </div>
+                <div class="form-group">
+                    <label>Month:</label>
+                    <input type="number" name="month" min="1" max="12" placeholder="MM" required>
+                </div>
+                <div class="form-group">
+                    <label>Year:</label>
+                    <input type="number" name="year" min="2018" max="2030" placeholder="YYYY" required>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit">Generate Bill</button>
+                <a href="/" class="btn" style="background: #6c757d;">← Back to Home</a>
+            </div>
+        </form>
+    </div>
 
-{% if transactions %}
-<div class="bill-statement">
-    <h2>CDW Sapp Bank Statement</h2>
-    <p>Billing Period: {{ month }}/{{ year }}</p>
-    <p>Credit Card #: {{ masked_cc }}</p>
-</div>
+    {% if transactions %}
+        <div class="bill-statement">
+            <h2>🏦 CDW Sapp Bank Statement</h2>
+            <p><strong>Billing Period:</strong> {{ month }}/{{ year }}</p>
+            <p><strong>Credit Card #:</strong> {{ masked_cc }}</p>
+        </div>
 
-<table class="table">
-    <tr>
-        {% for key in transactions[0].keys() %}
-            <th>{{ key }}</th>
-        {% endfor %}
-    </tr>
-    {% for row in transactions %}
-    <tr>
-        {% for val in row.values() %}
-        <td>{{ val }}</td>
-        {% endfor %}
-    </tr>
-    {% endfor %}
-</table>
+        <div class="card">
+            <h2>Transaction Details</h2>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            {% for key in transactions[0].keys() %}
+                                <th>{{ key.replace('_', ' ').title() }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in transactions %}
+                        <tr>
+                            {% for val in row.values() %}
+                            <td>{{ val }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-<p class="total">Total Charges: {{ total }}</p>
-{% elif total is not none %}
-<p>No transactions found.</p>
-{% endif %}
+        <div class="total">
+            💰 Total Charges: {{ total }}
+        </div>
+    {% elif total is not none %}
+        <div class="card">
+            <h2>ℹ️ No Transactions</h2>
+            <p>No transactions found for the specified period.</p>
+        </div>
+    {% endif %}
 {% endblock %}
