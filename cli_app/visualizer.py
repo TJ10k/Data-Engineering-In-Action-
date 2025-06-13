@@ -39,6 +39,20 @@ def generate_visualization(df, chart_type, x_col=None, y_col=None):
     elif chart_type == "pie":
         if x_col is None:
             raise ValueError("x_col must be provided for pie chart")
+
+        if y_col is not None:
+            if not pd.api.types.is_numeric_dtype(df[y_col]):
+                raise ValueError(f"Column '{y_col}' is not numeric")
+            df.groupby(x_col)[y_col].sum().plot(
+                kind="pie", autopct="%1.1f%%", startangle=90
+            )
+            plt.title(f"Pie Chart of {y_col} by {x_col}")
+        else:
+            df[x_col].value_counts().plot(
+                kind="pie", autopct="%1.1f%%", startangle=90
+            )
+            plt.title(f"Pie Chart of {x_col}")
+
         df[x_col].value_counts().plot(kind="pie", autopct="%1.1f%%", startangle=90)
         plt.title(f"Pie Chart of {x_col}")
         plt.ylabel("")

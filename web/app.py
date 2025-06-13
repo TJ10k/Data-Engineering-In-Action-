@@ -111,6 +111,30 @@ def visualization_file(filename):
     folder = os.path.join(CAPSTONE_HOME, 'logs', 'visualizations')
     return send_from_directory(folder, filename)
 
+@app.route('/visualize_monthly_bill', methods=['POST'])
+def visualize_monthly_bill():
+    cc_num = request.form.get('cc_num')
+    month = request.form.get('month')
+    year = request.form.get('year')
+
+    df, _ = generate_monthly_bill(cc_num, int(month), int(year))
+    if df.empty:
+        return render_template('visualize.html', image=None)
+
+    if 'Amount' in df.columns:
+        df['Amount'] = df['Amount'].replace('[\$,]', '', regex=True).astype(float)
+
+    fig = generate_visualization(df, 'pie', 'Transaction', 'Amount')
+
+    log_folder = os.path.join(CAPSTONE_HOME, 'logs', 'visualizations')
+    os.makedirs(log_folder, exist_ok=True)
+    timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+    filename = os.path.join(log_folder, f'bill_pie_{timestamp}.png')
+    fig.savefig(filename)
+    plt.close(fig)
+    image_name = os.path.basename(filename)
+
+    return render_template('visualize.html', image=image_name)
 
 @app.route('/transactions_range', methods=['GET'])
 def transactions_range():
@@ -143,6 +167,7 @@ def monthly_bill():
     total = None
     month = None
     year = None
+    cc_num = None
     masked_cc = None
     if request.method == 'POST':
         cc_num = request.form.get('cc_num')
@@ -161,6 +186,7 @@ def monthly_bill():
         month=month,
         year=year,
         masked_cc=masked_cc,
+        cc_num=cc_num,
     )
 
 
