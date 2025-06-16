@@ -59,20 +59,12 @@
             </div>
         </div>
 
-<p class="total">Total Charges: {{ total }}</p>
-<form method="post" action="{{ url_for('visualize_monthly_bill') }}">
-    <input type="hidden" name="cc_num" value="{{ cc_num }}">
-    <input type="hidden" name="month" value="{{ month }}">
-    <input type="hidden" name="year" value="{{ year }}">
-    <button type="submit">View Pie Chart</button>
-</form>
-{% elif total is not none %}
-<p>No transactions found.</p>
-{% endif %}
         <div class="total">
             💰 Total Charges: {{ total }}
         </div>
-    {% elif total is not none %}
+    {% endif %}
+    
+    {% if not transactions and total is not none %}
         <div class="card">
             <h2>ℹ️ No Transactions</h2>
             <p>No transactions found for the specified period.</p>
